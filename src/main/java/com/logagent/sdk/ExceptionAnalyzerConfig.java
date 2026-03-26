@@ -286,8 +286,8 @@ public final class ExceptionAnalyzerConfig {
         private int queueCapacity = 64;
         private int keepAliveSec = 60;
 
-        private String llmApiUrl = "https://your-llm-endpoint.example.com/api/v2/completions";
-        private String llmModel = "deepseek";
+        private String llmApiUrl = "https://api.openai.com/v1/chat/completions";
+        private String llmModel = "gpt-4o-mini";
         private int maxTokens = 1500;
         private double temperature = 0.2D;
 
@@ -295,7 +295,7 @@ public final class ExceptionAnalyzerConfig {
         private int readTimeoutSec = 60;
         private int writeTimeoutSec = 10;
 
-        private String authHeaderName = "token";
+        private String authHeaderName = "Authorization";
         private String authToken;
         private Map<String, String> headers = new LinkedHashMap<String, String>();
 

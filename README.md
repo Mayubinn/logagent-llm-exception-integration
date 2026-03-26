@@ -89,10 +89,10 @@ analyzer.analyze(exception);
 
 ```java
 ExceptionAnalyzerConfig config = ExceptionAnalyzerConfig.builder()
-        .llmApiUrl("https://your-llm-endpoint.example.com/api/v2/completions")
-        .llmModel("deepseek")
-        .authHeaderName("token")
-        .authToken(System.getenv("LLM_API_TOKEN"))
+        .llmApiUrl("https://api.openai.com/v1/chat/completions")
+        .llmModel("gpt-4o-mini")
+        .authHeaderName("Authorization")
+        .authToken("Bearer " + System.getenv("OPENAI_API_KEY"))
         .maxTokens(1500)
         .temperature(0.2)
         .codeContextEnabled(true)
@@ -289,9 +289,9 @@ exception:
 
 | 参数 | 默认值 | 说明 |
 |---|---:|---|
-| `llm-api-url` | `https://your-llm-endpoint.example.com/api/v2/completions` | LLM 接口地址 |
-| `llm-model` | `deepseek` | 模型名称 |
-| `auth-header-name` | `token` | 认证头名称 |
+| `llm-api-url` | `https://api.openai.com/v1/chat/completions` | OpenAI Chat Completions 接口地址 |
+| `llm-model` | `gpt-4o-mini` | 默认 GPT 模型 |
+| `auth-header-name` | `Authorization` | 认证头名称 |
 | `auth-token` | 空 | 认证 token |
 | `headers.*` | 空 | 额外请求头 |
 | `custom-system-prompt` | 空 | 自定义 system prompt |
@@ -322,10 +322,10 @@ exception:
 exception:
   llm:
     enabled: false
-    llm-api-url: https://your-llm-endpoint.example.com/api/v2/completions
-    llm-model: deepseek
-    auth-header-name: token
-    auth-token: ${LLM_API_TOKEN:}
+    llm-api-url: https://api.openai.com/v1/chat/completions
+    llm-model: gpt-4o-mini
+    auth-header-name: Authorization
+    auth-token: "Bearer ${OPENAI_API_KEY:}"
     include-request-context: true
     include-handler-signature: true
     code-context-enabled: true
