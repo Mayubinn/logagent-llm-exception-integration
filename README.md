@@ -298,7 +298,9 @@ exception:
 | `output-mode` | `LOG` | `LOG` / `STDOUT` / `CALLBACK` |
 | `max-tokens` | `1500` | 最大生成 token |
 | `temperature` | `0.2` | 采样温度 |
-| `max-exception-chars` | `16000` | 异常堆栈最大长度 |
+| `max-exception-chars` | `16000` | 异常/函数栈最大长度，超出后按字符截断 |
+
+说明：SDK 已经内置“函数栈最大长度”参数，对应的就是 `max-exception-chars`，默认值为 `16000`。
 
 ### 8.5 线程池与网络
 
@@ -316,21 +318,40 @@ exception:
 
 ## 9. 配置示例
 
+仓库根目录同时提供了一份带中文注释的完整示例配置：[application.yml.example](./application.yml.example)。
+
 ### application.yml
 
 ```yaml
 exception:
   llm:
+    # 是否开启异常分析
     enabled: false
+
+    # OpenAI Chat Completions 地址
     llm-api-url: https://api.openai.com/v1/chat/completions
+
+    # 默认模型
     llm-model: gpt-4o-mini
+
+    # OpenAI 认证头
     auth-header-name: Authorization
     auth-token: "Bearer ${OPENAI_API_KEY:}"
+
+    # 是否附带请求上下文
     include-request-context: true
+
+    # 是否附带处理器签名
     include-handler-signature: true
+
+    # 是否提取代码上下文
     code-context-enabled: true
     code-context-lines-before: 20
     code-context-lines-after: 20
+
+    # 异常/函数栈最大长度
+    max-exception-chars: 16000
+
     application-packages:
       - com.bocsoft.overseabase
 ```
