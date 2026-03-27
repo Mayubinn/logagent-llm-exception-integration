@@ -75,7 +75,7 @@ public class ExceptionAnalyzerAnalyzeSyncTest {
             Assert.assertTrue(requestBody.contains("requestUri=/demo/test"));
             Assert.assertTrue(requestBody.contains("### 异常堆栈"));
             Assert.assertTrue(requestBody.contains("### 报错代码位置"));
-            Assert.assertTrue(requestBody.contains("throw new RuntimeException"));
+            Assert.assertTrue(requestBody.contains("sourceType: SOURCE_FILE"));
             Assert.assertTrue(requestBody.contains("Integer.parseInt(rawValue);"));
         } finally {
             if (analyzer != null) {

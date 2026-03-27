@@ -1,0 +1,47 @@
+exception:
+  llm:
+    enabled: false
+
+    llm-api-url: https://api.openai.com/v1/chat/completions
+    llm-model: gpt-4o-mini
+    auth-header-name: Authorization
+    auth-token: "Bearer your-openai-api-key"
+
+    include-request-context: true
+    include-query-string: false
+    include-client-ip: false
+    include-trace-id: true
+    include-handler-signature: true
+    trace-id-mdc-key: traceId
+    max-context-length: 1024
+
+    code-context-enabled: true
+    code-context-lines-before: 20
+    code-context-lines-after: 20
+    code-context-max-chars: 12000
+    search-sources-jar: true
+    decompile-when-source-missing: true
+    max-code-frames: 2
+    application-packages:
+      - com.example.demo
+    source-roots:
+      - src/main/java
+      - src/test/java
+
+    output-mode: LOG
+    max-tokens: 1500
+    temperature: 0.2
+    max-exception-chars: 16000
+
+    core-pool-size: 1
+    max-pool-size: 2
+    queue-capacity: 64
+    keep-alive-sec: 60
+
+    connect-timeout-sec: 10
+    read-timeout-sec: 60
+    write-timeout-sec: 10
+
+    telemetry-name: logagent
+    telemetry-client-name: logagent-exception-analyzer-sdk
+    telemetry-client-version: 1.0.1

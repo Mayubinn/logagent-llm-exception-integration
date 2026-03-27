@@ -5,15 +5,20 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class ExceptionAnalyzerLiveOpenAiTest {
 
     @Test
-    public void shouldAnalyzeExceptionWithOpenAiWhenApiKeyConfigured() throws Exception {
-        String apiKey = System.getenv("OPENAI_API_KEY");
-        Assume.assumeTrue(apiKey != null && apiKey.trim().length() > 0);
+    public void shouldAnalyzeExceptionWithOpenAiWhenTestPropertiesConfigured() throws Exception {
+        Properties properties = loadTestProperties();
+        String apiUrl = readRequired(properties, "openai.api.url");
+        String apiKey = readRequired(properties, "openai.api.key");
+        String model = readOptional(properties, "openai.model", "gpt-4o-mini");
 
-        String apiUrl = envOrDefault("OPENAI_API_URL", "https://api.openai.com/v1/chat/completions");
-        String model = envOrDefault("OPENAI_MODEL", "gpt-4o-mini");
+        Assume.assumeTrue(apiUrl != null && apiKey != null);
 
         ExceptionAnalyzer analyzer = null;
         try {
@@ -41,6 +46,19 @@ public class ExceptionAnalyzerLiveOpenAiTest {
         }
     }
 
+    private Properties loadTestProperties() throws IOException {
+        InputStream in = getClass().getClassLoader().getResourceAsStream("openai-test.properties");
+        Assume.assumeTrue(in != null);
+
+        Properties properties = new Properties();
+        try {
+            properties.load(in);
+        } finally {
+            in.close();
+        }
+        return properties;
+    }
+
     private Throwable captureException() {
         try {
             new ExceptionFlowDemo().handleRequest("42");
@@ -51,8 +69,23 @@ public class ExceptionAnalyzerLiveOpenAiTest {
         }
     }
 
-    private String envOrDefault(String key, String defaultValue) {
-        String value = System.getenv(key);
-        return value == null || value.trim().isEmpty() ? defaultValue : value;
+    private String readRequired(Properties properties, String key) {
+        String value = properties.getProperty(key);
+        if (value == null) {
+            return null;
+        }
+        value = value.trim();
+        if (value.isEmpty() || value.startsWith("your-")) {
+            return null;
+        }
+        return value;
+    }
+
+    private String readOptional(Properties properties, String key, String defaultValue) {
+        String value = properties.getProperty(key);
+        if (value == null || value.trim().isEmpty()) {
+            return defaultValue;
+        }
+        return value.trim();
     }
 }
